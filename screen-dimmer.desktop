@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Screen Dimmer
+Comment=Régler la luminosité logicielle des écrans
+Exec=screen-dimmer ui
+Icon=display-brightness-symbolic
+Terminal=false
+Categories=Utility;
+StartupNotify=false
