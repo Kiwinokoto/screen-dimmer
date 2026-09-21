@@ -1,9 +1,22 @@
 [Desktop Entry]
 Type=Application
 Name=Screen Dimmer
-Comment=Régler la luminosité logicielle des écrans
-Exec=screen-dimmer ui
+Comment=Basculer la luminosité logicielle entre normal et atténué
+Exec=screen-dimmer toggle
 Icon=display-brightness-symbolic
 Terminal=false
 Categories=Utility;
 StartupNotify=false
+Actions=Adjust;Normal;Dim;
+
+[Desktop Action Adjust]
+Name=Régler…
+Exec=screen-dimmer ui
+
+[Desktop Action Normal]
+Name=Luminosité normale
+Exec=screen-dimmer normal
+
+[Desktop Action Dim]
+Name=Mode atténué
+Exec=screen-dimmer dim

@@ -1,3 +1,4 @@
 {
-  \project_id\: \screen-dimmer\,
-  epo\: \Kiwinokoto/screen-dimmer\n}
+  "project_id": "screen-dimmer",
+  "repo": "Kiwinokoto/screen-dimmer"
+}
