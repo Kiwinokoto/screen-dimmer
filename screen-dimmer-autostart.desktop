@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Screen Dimmer startup safety reset
+Comment=Restore neutral xrandr brightness at login
+Exec=screen-dimmer startup-reset
+Terminal=false
+NoDisplay=true
+X-GNOME-Autostart-enabled=true

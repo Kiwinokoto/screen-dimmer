@@ -7,7 +7,8 @@ STATE_FILE="$STATE_DIR/value"
 MIN="0.10"
 MAX="1.00"
 STEP="0.05"
-DEFAULT="0.55"
+DEFAULT="1.00"
+SYSTEM_DEFAULT="1.00"
 
 mkdir -p "$STATE_DIR"
 
@@ -42,21 +43,29 @@ read_value() {
   fi
 }
 
-apply_value() {
+set_outputs_value() {
   local value="$1"
-  local outputs
+  local outputs output
 
   value="$(clamp "$value")"
-  outputs="$(get_outputs)"
-
-  [[ -n "$outputs" ]] || fail "aucun écran connecté trouvé par xrandr"
+  outputs="$(get_outputs)" || return 1
+  [[ -n "$outputs" ]] || return 1
 
   while read -r output; do
     [[ -n "$output" ]] || continue
-    xrandr --output "$output" --brightness "$value"
+    xrandr --output "$output" --brightness "$value" || return 1
   done <<< "$outputs"
 
-  echo "$value" > "$STATE_FILE"
+  printf '%s\n' "$value"
+}
+
+apply_value() {
+  local value
+
+  value="$(set_outputs_value "$1")" ||
+    fail "impossible d'appliquer la luminosité via xrandr"
+
+  printf '%s\n' "$value" > "$STATE_FILE"
   echo "Luminosité logicielle: $value"
 }
 
@@ -76,36 +85,88 @@ adjust_value() {
   apply_value "$next"
 }
 
+restore_system_default() {
+  set_outputs_value "$SYSTEM_DEFAULT" >/dev/null 2>&1 || true
+}
+
+startup_safety_reset() {
+  local attempt
+
+  for ((attempt = 0; attempt < 5; attempt++)); do
+    if set_outputs_value "$SYSTEM_DEFAULT" >/dev/null 2>&1; then
+      return 0
+    fi
+    sleep 1
+  done
+
+  return 0
+}
+
 open_ui() {
   need_cmd zenity
 
-  local current percent chosen value
-  current="$(read_value)"
-  percent="$(awk -v v="$current" 'BEGIN { printf "%d", v * 100 }')"
+  local current percent event value
+  local zenity_pid
+  local reset_requested last_value
+  local temp_dir fifo
 
-  local rc=0
-  chosen="$(
+  temp_dir="$(mktemp -d "${TMPDIR:-/tmp}/screen-dimmer-ui.XXXXXX")"
+  fifo="$temp_dir/events"
+  mkfifo "$fifo"
+
+  # Any explicit close, script error or normal signal restores xrandr's
+  # neutral software multiplier. A hard power loss is handled at next login.
+  trap 'exit 0' HUP INT TERM
+  trap 'rm -rf -- "$temp_dir"; restore_system_default' EXIT
+
+  while true; do
+    current="$(read_value)"
+    apply_value "$current" >/dev/null
+    percent="$(awk -v v="$current" 'BEGIN { printf "%d", v * 100 }')"
+    reset_requested=0
+    last_value=""
+
     zenity --scale \
       --title="Screen dimmer" \
-      --text="Luminosité logicielle" \
+      --text="Luminosité logicielle — réglage en direct" \
       --min-value=10 \
       --max-value=100 \
       --value="$percent" \
       --step=5 \
-      --ok-label="Appliquer" \
-      --cancel-label="Annuler" \
-      --extra-button="Reset"
-  )" || rc=$?
+      --print-partial \
+      --ok-label="Fermer" \
+      --no-cancel \
+      --extra-button="Reset" > "$fifo" &
+    zenity_pid=$!
 
-  [[ "$rc" -eq 0 ]] || return 0
+    while IFS= read -r event; do
+      if [[ "$event" == "Reset" ]]; then
+        reset_requested=1
+        continue
+      fi
 
-  if [[ "$chosen" == "Reset" ]]; then
-    apply_value "1.00"
-    return 0
-  fi
+      [[ "$event" =~ ^[0-9]+$ ]] || continue
+      value="$(awk -v p="$event" 'BEGIN { printf "%.2f", p / 100 }')"
 
-  value="$(awk -v p="$chosen" 'BEGIN { printf "%.2f", p / 100 }')"
-  apply_value "$value"
+      if [[ "$value" != "$last_value" ]]; then
+        apply_value "$value" >/dev/null
+        last_value="$value"
+      fi
+    done < "$fifo"
+
+    wait "$zenity_pid" || true
+
+    if [[ "$reset_requested" -eq 1 ]]; then
+      apply_value "$SYSTEM_DEFAULT" >/dev/null
+      continue
+    fi
+
+    break
+  done
+
+  restore_system_default
+  rm -rf -- "$temp_dir"
+  trap - EXIT HUP INT TERM
 }
 
 need_cmd xrandr
@@ -121,7 +182,10 @@ case "${1:-ui}" in
     adjust_value down
     ;;
   reset|off)
-    apply_value "1.00"
+    apply_value "$SYSTEM_DEFAULT"
+    ;;
+  startup-reset)
+    startup_safety_reset
     ;;
   *)
     apply_value "$1"
