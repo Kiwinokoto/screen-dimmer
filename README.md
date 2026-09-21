@@ -5,7 +5,7 @@ Petit utilitaire Linux/X11 pour atténuer tous les écrans connectés via `xrand
 ## UX
 
 - **Double-clic sur `Screen Dimmer` sur le Bureau** : bascule entre la luminosité logicielle normale (`xrandr --brightness 1.00`) et la valeur atténuée mémorisée.
-- **Clic droit → Régler…** : ouvre le curseur Zenity et applique la valeur en direct.
+- **Clic droit → Régler le mode nuit…** : action native Nemo, visible uniquement sur le raccourci Screen Dimmer du Bureau, qui ouvre le curseur Zenity et applique la valeur en direct.
 - **Clic droit → Luminosité normale** : force immédiatement `1.00` sans effacer la valeur nocturne mémorisée.
 - **Clic droit → Mode atténué** : réapplique immédiatement la valeur mémorisée.
 - Fermer la fenêtre de réglage laisse la valeur choisie appliquée.
@@ -45,9 +45,10 @@ Aucun `sudo` n'est utilisé. L'installateur crée ou met à jour :
 - `~/.local/bin/screen-dimmer` ;
 - `~/.local/share/applications/screen-dimmer.desktop` ;
 - le raccourci `Screen Dimmer.desktop` dans le dossier Bureau réel renvoyé par `xdg-user-dir DESKTOP` ;
+- `~/.local/share/nemo/actions/screen-dimmer-adjust.nemo_action`, qui fournit l’entrée de clic droit sur Cinnamon/Nemo ;
 - `~/.config/autostart/screen-dimmer-reset.desktop`.
 
-Le raccourci Bureau est donc un fichier géré par le projet, et non une copie à maintenir à la main.
+Le raccourci Bureau et son action de clic droit Nemo sont donc tous deux gérés par le projet, et non des copies à maintenir à la main. Les `Desktop Actions` restent aussi présentes dans le `.desktop` pour les lanceurs qui les prennent en charge, mais Nemo utilise son propre fichier `.nemo_action` sur le Bureau.
 
 ## Utilisation CLI
 

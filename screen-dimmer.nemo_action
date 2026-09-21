@@ -1,0 +1,11 @@
+[Nemo Action]
+Name=Régler le mode nuit…
+Comment=Choisir la valeur atténuée de Screen Dimmer
+Exec=screen-dimmer ui
+Icon-Name=display-brightness-symbolic
+Selection=s
+Extensions=desktop;
+Files=Screen Dimmer.desktop;
+Conditions=desktop;
+Dependencies=zenity;xrandr;
+Terminal=false

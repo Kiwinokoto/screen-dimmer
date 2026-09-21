@@ -98,8 +98,9 @@ INSTALL_BIN="$TMP/install-bin"
 INSTALL_APPS="$TMP/install-apps"
 INSTALL_AUTOSTART="$TMP/install-autostart"
 INSTALL_DESKTOP="$TMP/install-desktop"
+INSTALL_NEMO_ACTIONS="$TMP/install-nemo-actions"
 
-SCREEN_DIMMER_BIN_DIR="$INSTALL_BIN" SCREEN_DIMMER_APP_DIR="$INSTALL_APPS" SCREEN_DIMMER_AUTOSTART_DIR="$INSTALL_AUTOSTART" SCREEN_DIMMER_DESKTOP_DIR="$INSTALL_DESKTOP"   "$ROOT/install.sh" >/dev/null
+SCREEN_DIMMER_BIN_DIR="$INSTALL_BIN" SCREEN_DIMMER_APP_DIR="$INSTALL_APPS" SCREEN_DIMMER_AUTOSTART_DIR="$INSTALL_AUTOSTART" SCREEN_DIMMER_DESKTOP_DIR="$INSTALL_DESKTOP" SCREEN_DIMMER_NEMO_ACTION_DIR="$INSTALL_NEMO_ACTIONS"   "$ROOT/install.sh" >/dev/null
 
 [[ -x "$INSTALL_BIN/screen-dimmer" ]]
 [[ -x "$INSTALL_DESKTOP/Screen Dimmer.desktop" ]]
@@ -109,5 +110,9 @@ grep -Fq "Exec=\"$INSTALL_BIN/screen-dimmer\" ui"   "$INSTALL_DESKTOP/Screen Dim
 grep -Fq "Exec=\"$INSTALL_BIN/screen-dimmer\" normal"   "$INSTALL_DESKTOP/Screen Dimmer.desktop"
 grep -Fq "Exec=\"$INSTALL_BIN/screen-dimmer\" dim"   "$INSTALL_DESKTOP/Screen Dimmer.desktop"
 grep -Fq "Exec=\"$INSTALL_BIN/screen-dimmer\" startup-reset"   "$INSTALL_AUTOSTART/screen-dimmer-reset.desktop"
+grep -Fq "Name=Régler le mode nuit…"   "$INSTALL_NEMO_ACTIONS/screen-dimmer-adjust.nemo_action"
+grep -Fq "Exec=\"$INSTALL_BIN/screen-dimmer\" ui"   "$INSTALL_NEMO_ACTIONS/screen-dimmer-adjust.nemo_action"
+grep -Fq "Files=Screen Dimmer.desktop;"   "$INSTALL_NEMO_ACTIONS/screen-dimmer-adjust.nemo_action"
+grep -Fq "Conditions=desktop;"   "$INSTALL_NEMO_ACTIONS/screen-dimmer-adjust.nemo_action"
 
 echo "screen-dimmer smoke tests: OK"

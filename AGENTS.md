@@ -14,13 +14,15 @@
 - Installed executable: `~/.local/bin/screen-dimmer`.
 - App launcher: `~/.local/share/applications/screen-dimmer.desktop`.
 - Desktop shortcut: `Screen Dimmer.desktop` in the XDG Desktop directory.
+- Nemo desktop context action: `~/.local/share/nemo/actions/screen-dimmer-adjust.nemo_action`.
 - Login safety entry: `~/.config/autostart/screen-dimmer-reset.desktop`.
 
 ## UX invariants
 
 - Default invocation is a toggle: neutral `1.00` ↔ remembered dim value.
 - Desktop double-click uses that toggle.
-- Native desktop actions expose `Régler…`, `Luminosité normale` and `Mode atténué`.
+- The Cinnamon/Nemo desktop right-click entry `Régler le mode nuit…` is provided by a dedicated `.nemo_action` restricted to `Screen Dimmer.desktop`.
+- Standard Desktop Actions remain in the `.desktop` for launchers that support them.
 - The UI changes the dim preference live and leaves it applied when closed.
 - Returning to normal must never erase the remembered dim preference.
 - Login autostart restores `1.00` and marks the mode normal without erasing the dim preference.
