@@ -1,0 +1,38 @@
+name: Build Screen Dimmer Windows
+
+on:
+  push:
+    branches:
+      - dev/windows-overlay
+    paths:
+      - 'windows/**'
+      - '.github/workflows/windows-build.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure
+        run: cmake -S windows -B build/windows -A x64
+      - name: Build
+        run: cmake --build build/windows --config Release
+      - name: Unit tests
+        run: ctest --test-dir build/windows -C Release --output-on-failure
+      - name: Package portable app
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path dist -Force | Out-Null
+          Copy-Item build/windows/Release/ScreenDimmer.exe dist/ScreenDimmer.exe
+          Copy-Item windows/install.ps1 dist/install.ps1
+          Copy-Item windows/README.md dist/README.md
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ScreenDimmer-Windows
+          path: dist/
+          if-no-files-found: error
+          retention-days: 14

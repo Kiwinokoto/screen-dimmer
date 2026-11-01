@@ -17,6 +17,17 @@
 - Nemo desktop context action: `~/.local/share/nemo/actions/screen-dimmer-adjust.nemo_action`.
 - Login safety entry: `~/.config/autostart/screen-dimmer-reset.desktop`.
 
+## Windows port (in development)
+
+- Isolated under `windows/`: native C++17/Win32 overlay, tray icon, switch and live slider.
+- Never change Linux behavior as a side effect of Windows work.
+- The overlay is visual only, click-through, multi-monitor, user-scoped and does not alter hardware brightness.
+- Closing the settings window must leave the active filter running; explicitly quitting removes every overlay.
+- Toggling normal must preserve the configured dim level; starting a new process must reset the overlay to normal.
+- Prefer a short-lived `dev/windows-overlay` branch while Windows GUI checks remain outstanding.
+- Compile with CMake/Visual Studio and run CTest on Windows. A C++17 pure-logic test is available on Linux.
+- Do not promote to `main` or publish a public release without checking the actual Windows behavior.
+
 ## UX invariants
 
 - Default invocation is a toggle: neutral `1.00` ↔ remembered dim value.

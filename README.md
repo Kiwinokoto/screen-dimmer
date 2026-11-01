@@ -2,6 +2,8 @@
 
 Petit utilitaire Linux/X11 pour atténuer tous les écrans connectés via `xrandr`, avec un fonctionnement pensé comme un interrupteur simple.
 
+**Port Windows 10/11 en développement :** voir [`windows/README.md`](windows/README.md). Il utilise un overlay noir transparent, un switch et un curseur dans une fenêtre accessible depuis la zone de notification. La version Linux ci-dessous reste inchangée.
+
 ## UX
 
 - **Double-clic sur `Screen Dimmer` sur le Bureau** : bascule entre la luminosité logicielle normale (`xrandr --brightness 1.00`) et la valeur atténuée mémorisée.
