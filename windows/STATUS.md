@@ -4,6 +4,7 @@
 - Développement isolé : `dev/windows-overlay` ; Linux/X11 non modifié, hormis références documentaires.
 - Implémentation : Win32/C++17, overlay noir click-through sur tous les moniteurs, switch et slider 10–100 %, tray, préférences INI, commandes pour raccourcis et PowerShell d'installation utilisateur.
 - Contrôles locaux : tests de logique C++17 via `g++` OK ; `bash -n` et `tests/smoke.sh` Linux OK ; `git diff --check` OK.
-- Non testé : compilation MSVC/Windows, UI, tray, écrans multiples, HDR et bascule après fermeture brutale. Aucun compilateur Windows disponible dans l'environnement local.
+- Compilation Windows : **OK** (GitHub Actions run `41342770256`, commit distant `c2a8f6c`, MSVC 19.51, 2026-11-01) ; CTest Windows **1/1 réussi**. Artefact `ScreenDimmer-Windows` disponible jusqu'au 2026-11-15.
+- Non testé : comportement visuel réel de l'UI, tray, écrans multiples, HDR et bascule après fermeture brutale. Aucune session Windows interactive disponible dans cet environnement.
 - `.agentctl.json` existe, mais aucun client AgentCTL utilisable ici : l'absence de bail concurrent n'a pas été vérifiée auprès du contrôleur central. Ne pas toucher à `main` avant cette vérification.
-- Suite : compiler avec le workflow Windows sur la branche dédiée ; corriger erreurs éventuelles ; faire tester l'exécutable sur le HP Windows 11 ; seulement ensuite envisager merge / publication.
+- Suite : faire tester l'exécutable sur le HP Windows 11 ; corriger les éventuels défauts ; seulement ensuite envisager merge / publication. Ne pas lancer manuellement un workflow sans demande explicite.
