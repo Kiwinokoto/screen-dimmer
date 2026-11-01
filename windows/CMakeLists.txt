@@ -3,6 +3,10 @@ project(ScreenDimmerWindows LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+if(MSVC)
+    # Keep the portable EXE independent of the VC++ redistributable.
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+endif()
 
 if(WIN32)
     add_executable(ScreenDimmer WIN32 ScreenDimmer.cpp)

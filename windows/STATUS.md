@@ -7,4 +7,4 @@
 - Compilation Windows : **OK** (GitHub Actions run `41342770256`, commit distant `c2a8f6c`, MSVC 19.51, 2026-11-01) ; CTest Windows **1/1 réussi**. Artefact `ScreenDimmer-Windows` disponible jusqu'au 2026-11-15.
 - Non testé : comportement visuel réel de l'UI, tray, écrans multiples, HDR et bascule après fermeture brutale. Aucune session Windows interactive disponible dans cet environnement.
 - `.agentctl.json` existe, mais aucun client AgentCTL utilisable ici : l'absence de bail concurrent n'a pas été vérifiée auprès du contrôleur central. Ne pas toucher à `main` avant cette vérification.
-- Suite : faire tester l'exécutable sur le HP Windows 11 ; corriger les éventuels défauts ; seulement ensuite envisager merge / publication. Ne pas lancer manuellement un workflow sans demande explicite.
+- Suite : livrer une compilation statique sans dépendance VC++ redistribuable, puis faire tester l'exécutable sur le HP Windows 11 ; corriger les éventuels défauts ; seulement ensuite envisager merge / publication. Ne pas lancer manuellement un workflow sans demande explicite.

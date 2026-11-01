@@ -1,6 +1,6 @@
 # Screen Dimmer pour Windows 10/11
 
-Version native Win32, sans pilote, sans élévation, sans service ni dépendance à installer. Le filtre est une fenêtre noire transparente qui laisse passer les clics ; il ne modifie **pas** le rétroéclairage matériel. Le code Linux/X11 reste indépendant.
+Version native Win32 (runtime C++ lié statiquement), sans pilote, sans élévation, sans service ni dépendance à installer. Le filtre est une fenêtre noire transparente qui laisse passer les clics ; il ne modifie **pas** le rétroéclairage matériel. Le code Linux/X11 reste indépendant.
 
 ## Utilisation
 
